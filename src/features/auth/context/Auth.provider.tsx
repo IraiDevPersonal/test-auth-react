@@ -1,23 +1,12 @@
-import { useCallback, useState } from "react";
-import { UserEntity } from "../entities/user.entity";
-import { AuthContext, SetAuthPayload } from "./Auth.context";
+import { useAuth } from "../hooks/useAuth";
+import { AuthContext } from "./Auth.context";
 
 interface Props {
   children: React.ReactNode;
 }
 
 export const AuthProvider: React.FC<Props> = ({ children }) => {
-  const [user, setUser] = useState<UserEntity | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const value = useAuth();
 
-  const setAuth = useCallback((payload: SetAuthPayload) => {
-    setUser(payload.user);
-    setIsAuthenticated(payload.isAuthenticated);
-  }, []);
-
-  return (
-    <AuthContext value={{ user, isAuthenticated, setAuth }}>
-      {children}
-    </AuthContext>
-  );
+  return <AuthContext value={value}>{children}</AuthContext>;
 };

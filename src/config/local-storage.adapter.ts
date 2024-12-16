@@ -22,4 +22,8 @@ export class LocalStorageAdapter {
   public removeFormStorage() {
     this.localStorage.removeItem(this.key);
   }
+
+  public hasToken() {
+    return !!this.getFromStorage();
+  }
 }

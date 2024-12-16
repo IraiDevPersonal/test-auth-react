@@ -1,9 +1,9 @@
 import { useActionState } from "react";
-import { useAuth } from "../hooks/useAuth";
+import { useAuthContext } from "../context/Auth.context";
 import { LoginUserPayload } from "../services/auth.service";
 
 const LoginPage = () => {
-  const { loginUser } = useAuth();
+  const { loginUser } = useAuthContext();
 
   const [, formAction] = useActionState(
     async (prev: unknown, queryData: FormData) => {

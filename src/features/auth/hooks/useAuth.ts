@@ -1,39 +1,56 @@
 import { LocalStorageAdapter } from "@/config/local-storage.adapter";
-import { useCallback } from "react";
-import { useAuthContext } from "../context/Auth.context";
+import { useCallback, useEffect, useState } from "react";
+import { UserEntity } from "../entities/user.entity";
 import { AuthService, LoginUserPayload } from "../services/auth.service";
 
 const ls = new LocalStorageAdapter("token");
 const authService = new AuthService(ls);
 
 export function useAuth() {
-  const { isAuthenticated, setAuth, user } = useAuthContext();
+  const [user, setUser] = useState<UserEntity | null>(null);
+  const [isLoading, setIsLoading] = useState(ls.hasToken());
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const loginUser = useCallback(
-    async (payload: LoginUserPayload) => {
-      try {
-        const user = await authService.loginUser(payload);
-        setAuth({
-          isAuthenticated: true,
-          user,
-        });
-      } catch (error) {
-        alert(`${error}`);
-        setAuth({
-          isAuthenticated: false,
-          user: null,
-        });
-        return null;
-      }
-    },
-    [setAuth]
-  );
+  useEffect(() => {
+    if (!ls.hasToken()) return;
+
+    setIsLoading(true);
+    authService
+      .renewUser()
+      .then((user) => {
+        if (user) {
+          setUser(user);
+          setIsAuthenticated(true);
+        }
+      })
+      .catch((error) => {
+        const errorMessage = `${error}`;
+        setUser(null);
+        setIsAuthenticated(false);
+        alert(errorMessage);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
+
+  const loginUser = useCallback(async (payload: LoginUserPayload) => {
+    try {
+      const user = await authService.loginUser(payload);
+      setUser(user);
+      setIsAuthenticated(true);
+    } catch (error) {
+      alert(`${error}`);
+      setUser(null);
+      setIsAuthenticated(false);
+    }
+  }, []);
 
   return {
-    // states
     user,
+    isLoading,
     isAuthenticated,
-    // functions
+    // methods
     loginUser,
   };
 }
