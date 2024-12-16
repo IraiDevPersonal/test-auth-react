@@ -1,10 +1,12 @@
+import { AxiosAdapter } from "@/config/axios.adapter";
 import { LocalStorageAdapter } from "@/config/local-storage.adapter";
 import { useCallback, useEffect, useState } from "react";
 import { UserEntity } from "../entities/user.entity";
 import { AuthService, LoginUserPayload } from "../services/auth.service";
 
 const ls = new LocalStorageAdapter("token");
-const authService = new AuthService(ls);
+const axiosAdapter = new AxiosAdapter(ls);
+const authService = new AuthService(ls, axiosAdapter);
 
 export function useAuth() {
   const [user, setUser] = useState<UserEntity | null>(null);
@@ -14,14 +16,11 @@ export function useAuth() {
   useEffect(() => {
     if (!ls.hasToken()) return;
 
-    setIsLoading(true);
     authService
       .renewUser()
       .then((user) => {
-        if (user) {
-          setUser(user);
-          setIsAuthenticated(true);
-        }
+        setUser(user);
+        setIsAuthenticated(true);
       })
       .catch((error) => {
         const errorMessage = `${error}`;

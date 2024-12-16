@@ -1,7 +1,7 @@
 import { userStoreApi } from "@/config/apis/user-store.api";
-import axios from "axios";
-import { UserEntity } from "../entities/user.entity";
+import { AxiosAdapter } from "@/config/axios.adapter";
 import { LocalStorageAdapter } from "@/config/local-storage.adapter";
+import { UserEntity } from "../entities/user.entity";
 
 export interface LoginUserPayload {
   email: string;
@@ -9,42 +9,35 @@ export interface LoginUserPayload {
 }
 
 export class AuthService {
-  constructor(private readonly localStorage: LocalStorageAdapter) {}
+  constructor(
+    private readonly localStorage: LocalStorageAdapter,
+    private readonly axiosAdapter: AxiosAdapter
+  ) {}
 
   public async loginUser(payload: LoginUserPayload) {
     try {
       const { data } = await userStoreApi.post("/auth/login", payload);
       const result = this.authResponseAdapater(data);
-      this.localStorage.saveInStorage(result.token as string);
+      this.localStorage.saveInStorage(result.token);
       return result.user;
     } catch (error) {
-      throw new Error(this.handleError(error));
+      throw new Error(this.axiosAdapter.handleError(error));
     }
   }
 
   public async renewUser() {
     try {
-      const token = this.localStorage.getFromStorage();
-
-      if (!token) {
-        return null;
-      }
-
-      const { data } = await userStoreApi.get("/auth/renew", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      this.axiosAdapter.appendAuthorizationToken(userStoreApi);
+      const { data } = await userStoreApi.get("/auth/renew");
 
       // throw new Error("Error en validacion de sesion");
 
       const { token: newToken, user } = this.authResponseAdapater(data);
-      this.localStorage.saveInStorage(newToken as string);
+      this.localStorage.saveInStorage(newToken);
       return user;
     } catch (error) {
       this.localStorage.removeFormStorage();
-      const errorMessage = this.handleError(error);
-      console.log(errorMessage);
-      // throw new Error(errorMessage);
-      return null;
+      throw new Error(this.axiosAdapter.handleError(error));
     }
   }
 
@@ -53,15 +46,7 @@ export class AuthService {
 
     return {
       user: UserEntity.fromObject(user),
-      token: token,
+      token: token as string,
     };
-  }
-
-  private handleError(error: unknown) {
-    if (axios.isAxiosError(error)) {
-      return `${error.message}`;
-    }
-
-    return `${error}`;
   }
 }
