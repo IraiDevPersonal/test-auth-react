@@ -5,11 +5,12 @@ export class UserEntity {
     public email: string,
     public emailValidated: boolean,
     public role: string[],
-    public img?: string
+    public img?: string,
+    public lastLogout?: Date
   ) {}
 
   static fromObject(object: Record<string, any>) {
-    const { id, name, email, emailValidated, role, img } = object;
+    const { id, name, email, emailValidated, role, img, lastLogout } = object;
 
     if (!id) {
       throw new Error("Missing id");
@@ -31,6 +32,14 @@ export class UserEntity {
       throw new Error("Missing role");
     }
 
-    return new UserEntity(id, name, email, emailValidated, role, img);
+    return new UserEntity(
+      id,
+      name,
+      email,
+      emailValidated,
+      role,
+      img,
+      lastLogout
+    );
   }
 }

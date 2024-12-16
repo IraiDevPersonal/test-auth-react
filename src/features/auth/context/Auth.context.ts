@@ -1,12 +1,12 @@
 import { createContext, use } from "react";
 import { UserEntity } from "../entities/user.entity";
-import { LoginUserPayload } from "../services/auth.service";
 
 interface ContextProps {
   isLoading: boolean;
   user: UserEntity | null;
   isAuthenticated: boolean;
-  loginUser(payload: LoginUserPayload): Promise<void>;
+  logoutUser(): Promise<void>;
+  loginUser(payload: FormData): Promise<void>;
 }
 
 export const AuthContext = createContext<ContextProps | undefined>(undefined);

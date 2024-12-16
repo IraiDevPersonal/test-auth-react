@@ -41,6 +41,19 @@ export class AuthService {
     }
   }
 
+  public async logoutUser() {
+    try {
+      this.httpClient.appendAuthorizationToken(userStoreApi);
+      const { data } = await userStoreApi.get("/auth/logout");
+      this.localStorage.removeFormStorage();
+      return data.message as string;
+    } catch (error) {
+      throw new Error(this.httpClient.handleError(error));
+    }
+  }
+
+  // PRIVATE METHODS
+
   private authResponseAdapater(data: Record<string, any>) {
     const { user, token } = data;
 

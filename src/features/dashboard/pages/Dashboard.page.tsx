@@ -1,3 +1,4 @@
+import { Logout } from "@/features/auth/components/Logout";
 import { Link } from "react-router-dom";
 
 const DashboardPage = () => {
@@ -9,6 +10,7 @@ const DashboardPage = () => {
           ir a otra pagina
         </Link>
       </div>
+      <Logout />
     </main>
   );
 };
