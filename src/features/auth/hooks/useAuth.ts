@@ -1,20 +1,21 @@
-import { AxiosAdapter } from "@/config/axios.adapter";
+import { HttpClient } from "@/config/http-client";
 import { LocalStorageAdapter } from "@/config/local-storage.adapter";
 import { useCallback, useEffect, useState } from "react";
 import { UserEntity } from "../entities/user.entity";
 import { AuthService, LoginUserPayload } from "../services/auth.service";
+import { Notification } from "@/config/notification";
 
-const ls = new LocalStorageAdapter("token");
-const axiosAdapter = new AxiosAdapter(ls);
-const authService = new AuthService(ls, axiosAdapter);
+const storage = new LocalStorageAdapter("token");
+const httpClient = new HttpClient(storage);
+const authService = new AuthService(storage, httpClient);
 
 export function useAuth() {
   const [user, setUser] = useState<UserEntity | null>(null);
-  const [isLoading, setIsLoading] = useState(ls.hasToken());
+  const [isLoading, setIsLoading] = useState(storage.hasToken());
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    if (!ls.hasToken()) return;
+    if (!storage.hasToken()) return;
 
     authService
       .renewUser()
@@ -23,10 +24,9 @@ export function useAuth() {
         setIsAuthenticated(true);
       })
       .catch((error) => {
-        const errorMessage = `${error}`;
         setUser(null);
         setIsAuthenticated(false);
-        alert(errorMessage);
+        Notification.error(HttpClient.handleError(error));
       })
       .finally(() => {
         setIsLoading(false);
@@ -39,9 +39,9 @@ export function useAuth() {
       setUser(user);
       setIsAuthenticated(true);
     } catch (error) {
-      alert(`${error}`);
       setUser(null);
       setIsAuthenticated(false);
+      Notification.error(HttpClient.handleError(error));
     }
   }, []);
 

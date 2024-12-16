@@ -1,8 +1,8 @@
-import axios from "axios";
+import { HttpClient } from "../http-client";
 
 const time = 1500;
 
-export const userStoreApi = axios.create({
+export const userStoreApi = HttpClient.create({
   baseURL: "http://localhost:3000/api",
 });
 

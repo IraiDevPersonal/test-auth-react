@@ -1,15 +1,19 @@
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosInstance, CreateAxiosDefaults } from "axios";
 import { LocalStorageAdapter } from "./local-storage.adapter";
 
-export class AxiosAdapter {
+export class HttpClient {
   constructor(private readonly localStorage: LocalStorageAdapter) {}
+
+  public static create(config?: CreateAxiosDefaults) {
+    return axios.create(config);
+  }
 
   public handleError(error: unknown) {
     if (axios.isAxiosError(error)) {
       return `${error.message}`;
     }
-
-    return `${error}`;
+    const { message } = error as Error;
+    return message;
   }
 
   static handleError(error: unknown) {
@@ -17,7 +21,8 @@ export class AxiosAdapter {
       return `${error.message}`;
     }
 
-    return `${error}`;
+    const { message } = error as Error;
+    return message;
   }
 
   public appendAuthorizationToken(axiosInstance: AxiosInstance) {

@@ -22,7 +22,6 @@ const LoginPage = () => {
       <form
         className="p-4 border border-black w-max rounded-xl space-y-2 flex flex-col"
         action={formAction}
-        method="post"
       >
         <h1 className="text-2xl font-bold">Login Form</h1>
 

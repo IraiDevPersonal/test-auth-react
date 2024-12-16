@@ -1,5 +1,5 @@
 import { userStoreApi } from "@/config/apis/user-store.api";
-import { AxiosAdapter } from "@/config/axios.adapter";
+import { HttpClient } from "@/config/http-client";
 import { LocalStorageAdapter } from "@/config/local-storage.adapter";
 import { UserEntity } from "../entities/user.entity";
 
@@ -11,7 +11,7 @@ export interface LoginUserPayload {
 export class AuthService {
   constructor(
     private readonly localStorage: LocalStorageAdapter,
-    private readonly axiosAdapter: AxiosAdapter
+    private readonly httpClient: HttpClient
   ) {}
 
   public async loginUser(payload: LoginUserPayload) {
@@ -21,13 +21,13 @@ export class AuthService {
       this.localStorage.saveInStorage(result.token);
       return result.user;
     } catch (error) {
-      throw new Error(this.axiosAdapter.handleError(error));
+      throw new Error(this.httpClient.handleError(error));
     }
   }
 
   public async renewUser() {
     try {
-      this.axiosAdapter.appendAuthorizationToken(userStoreApi);
+      this.httpClient.appendAuthorizationToken(userStoreApi);
       const { data } = await userStoreApi.get("/auth/renew");
 
       // throw new Error("Error en validacion de sesion");
@@ -37,7 +37,7 @@ export class AuthService {
       return user;
     } catch (error) {
       this.localStorage.removeFormStorage();
-      throw new Error(this.axiosAdapter.handleError(error));
+      throw new Error(this.httpClient.handleError(error));
     }
   }
 
