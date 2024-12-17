@@ -1,4 +1,4 @@
-export const AuthFallback = () => {
+export const AuthLoader = () => {
   return (
     <main className="h-screen w-full grid place-content-center">
       <div>
