@@ -1,11 +1,12 @@
-import { useAuthContext } from "../context/Auth.context";
+import { useLogout } from "../hooks/useLogout";
 
 export const Logout = () => {
-  const { logoutUser } = useAuthContext();
+  const { isLoading, handleLogout } = useLogout();
   return (
     <button
-      className="p-4 hover:bg-gray-200 transition-colors"
-      onClick={logoutUser}
+      disabled={isLoading}
+      className="p-4 hover:bg-gray-200 transition-colors disabled:bg-gray-100 disabled:text-gray-400"
+      onClick={handleLogout}
     >
       Cerrar Sesion
     </button>
