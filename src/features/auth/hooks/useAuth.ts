@@ -1,17 +1,11 @@
 import { HttpClient } from "@/config/http-client";
 import { LocalStorageAdapter } from "@/config/local-storage.adapter";
-import { useEffect, useState } from "react";
+import { Notification } from "@/config/notification";
+import { useMountEffect } from "@/hooks";
+import { formDataToObject } from "@/utils/helpers.util";
+import { useState } from "react";
 import { UserEntity } from "../entities/user.entity";
 import { AuthService, LoginUserPayload } from "../services/auth.service";
-import { Notification } from "@/config/notification";
-import { formDataToObject } from "@/utils/helpers.util";
-
-const welcomeMessage = (userName: string) => {
-  Notification.success(`Bienvenido ${userName}`);
-};
-const errorMessage = (error: unknown) => {
-  Notification.error(HttpClient.handleError(error));
-};
 
 const storage = new LocalStorageAdapter("token");
 const httpClient = new HttpClient(storage);
@@ -22,7 +16,7 @@ export function useAuth() {
   const [isLoading, setIsLoading] = useState(storage.hasToken());
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  useEffect(() => {
+  useMountEffect(() => {
     if (!storage.hasToken()) return;
 
     authService
@@ -76,3 +70,10 @@ export function useAuth() {
     logoutUser,
   };
 }
+
+const welcomeMessage = (userName: string) => {
+  Notification.success(`Bienvenido ${userName}`);
+};
+const errorMessage = (error: unknown) => {
+  Notification.error(HttpClient.handleError(error));
+};
