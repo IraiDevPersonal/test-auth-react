@@ -8,21 +8,12 @@ export class HttpClient {
     return axios.create(config);
   }
 
-  public handleError(error: unknown) {
-    if (axios.isAxiosError(error)) {
-      return `${error.message}`;
-    }
-    const { message } = error as Error;
-    return message;
+  public static getErrorMessage(error: unknown) {
+    return handleError(error);
   }
 
-  static handleError(error: unknown) {
-    if (axios.isAxiosError(error)) {
-      return `${error.message}`;
-    }
-
-    const { message } = error as Error;
-    return message;
+  public getErrorMessage(error: unknown) {
+    return handleError(error);
   }
 
   public appendAuthorizationToken(axiosInstance: AxiosInstance) {
@@ -36,4 +27,16 @@ export class HttpClient {
       return config;
     });
   }
+}
+
+// UTILITY METHODS
+
+function handleError(error: unknown) {
+  if (axios.isAxiosError(error)) {
+    const defaultError = error.message;
+    return error.response?.data?.error ?? defaultError;
+  }
+
+  const { message } = error as Error;
+  return message;
 }

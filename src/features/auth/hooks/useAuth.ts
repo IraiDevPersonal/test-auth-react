@@ -75,5 +75,5 @@ const welcomeMessage = (userName: string) => {
   Notification.success(`Bienvenido ${userName}`);
 };
 const errorMessage = (error: unknown) => {
-  Notification.error(HttpClient.handleError(error));
+  Notification.error(HttpClient.getErrorMessage(error));
 };

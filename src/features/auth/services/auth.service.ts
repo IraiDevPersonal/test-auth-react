@@ -21,7 +21,7 @@ export class AuthService {
       this.storage.saveInStorage(result.token);
       return result.user;
     } catch (error) {
-      throw new Error(this.httpClient.handleError(error));
+      throw new Error(this.httpClient.getErrorMessage(error));
     }
   }
 
@@ -37,7 +37,7 @@ export class AuthService {
       return user;
     } catch (error) {
       this.storage.removeFormStorage();
-      throw new Error(this.httpClient.handleError(error));
+      throw new Error(this.httpClient.getErrorMessage(error));
     }
   }
 
@@ -48,7 +48,7 @@ export class AuthService {
       this.storage.removeFormStorage();
       return data.message as string;
     } catch (error) {
-      throw new Error(this.httpClient.handleError(error));
+      throw new Error(this.httpClient.getErrorMessage(error));
     }
   }
 
