@@ -8,7 +8,7 @@ interface Props extends Omit<NavLinkProps, "to"> {
   ref?: React.Ref<HTMLAnchorElement>;
 }
 
-export const NavLinkRouter: React.FC<Props> = ({
+export const RouterNavLink: React.FC<Props> = ({
   to,
   ref,
   expand,

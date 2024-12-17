@@ -8,6 +8,6 @@ interface Props extends Omit<LinkProps, "to"> {
   ref?: React.Ref<HTMLAnchorElement>;
 }
 
-export const LinkRouter: React.FC<Props> = ({ to, ref, expand, ...props }) => {
+export const RouterLink: React.FC<Props> = ({ to, ref, expand, ...props }) => {
   return <Link ref={ref} to={routerExpandPath(to, expand)} {...props} />;
 };
