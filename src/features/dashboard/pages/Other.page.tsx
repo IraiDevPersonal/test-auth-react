@@ -1,14 +1,16 @@
+import { LinkRouter } from "@/components/router/Link.router";
 import { Logout } from "@/features/auth/components/Logout";
-import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const OtherPage = () => {
+  const { id } = useParams();
   return (
     <main className="h-screen w-full grid place-content-center gap-3">
-      <h1>Other.page</h1>
+      <h1>Other.page {id}</h1>
       <div>
-        <Link to="/" className="hover:underline hover:text-blue-500">
+        <LinkRouter to="/" className="hover:underline hover:text-blue-500">
           ir a Dashboard
-        </Link>
+        </LinkRouter>
       </div>
       <Logout />
     </main>

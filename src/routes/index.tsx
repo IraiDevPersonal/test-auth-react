@@ -3,6 +3,7 @@ import DashboardPage from "@/features/dashboard/pages/Dashboard.page";
 import OtherPage from "@/features/dashboard/pages/Other.page";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ProtectedLayout, PublicLayout } from "./guards";
+import { routes } from "@/config/routes";
 
 export const AppRoutes = () => {
   return (
@@ -10,13 +11,14 @@ export const AppRoutes = () => {
       <Routes>
         {/* PUBLIC ROUTES */}
         <Route element={<PublicLayout />}>
-          <Route path="/login" element={<LoginPage />} />
+          <Route path={routes.login} element={<LoginPage />} />
         </Route>
 
         {/* PROTECTED ROUTES */}
         <Route element={<ProtectedLayout />}>
           <Route index element={<DashboardPage />} />
-          <Route path="/other" element={<OtherPage />} />
+          <Route path={routes.other} element={<OtherPage />} />
+          <Route path={`${routes.other}/:id`} element={<OtherPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
