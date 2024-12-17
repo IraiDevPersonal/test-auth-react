@@ -2,7 +2,7 @@ import LoginPage from "@/features/auth/pages/Login.page";
 import DashboardPage from "@/features/dashboard/pages/Dashboard.page";
 import OtherPage from "@/features/dashboard/pages/Other.page";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { ProtectedLayout, PublicLayout } from "./layouts";
+import { ProtectedLayout, PublicLayout } from "./guards";
 
 export const AppRoutes = () => {
   return (
