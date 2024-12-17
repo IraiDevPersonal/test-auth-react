@@ -1,6 +1,6 @@
 import { userStoreApi } from "@/config/apis/user-store.api";
 import { HttpClient } from "@/config/http-client";
-import { LocalStorageAdapter } from "@/config/local-storage.adapter";
+import { BrowserStorage } from "@/config/browser-storage";
 import { UserEntity } from "../entities/user.entity";
 
 export interface LoginUserPayload {
@@ -10,7 +10,7 @@ export interface LoginUserPayload {
 
 export class AuthService {
   constructor(
-    private readonly localStorage: LocalStorageAdapter,
+    private readonly storage: BrowserStorage,
     private readonly httpClient: HttpClient
   ) {}
 
@@ -18,7 +18,7 @@ export class AuthService {
     try {
       const { data } = await userStoreApi.post("/auth/login", payload);
       const result = this.authResponseAdapater(data);
-      this.localStorage.saveInStorage(result.token);
+      this.storage.saveInStorage(result.token);
       return result.user;
     } catch (error) {
       throw new Error(this.httpClient.handleError(error));
@@ -33,10 +33,10 @@ export class AuthService {
       // throw new Error("Error en validacion de sesion");
 
       const { token: newToken, user } = this.authResponseAdapater(data);
-      this.localStorage.saveInStorage(newToken);
+      this.storage.saveInStorage(newToken);
       return user;
     } catch (error) {
-      this.localStorage.removeFormStorage();
+      this.storage.removeFormStorage();
       throw new Error(this.httpClient.handleError(error));
     }
   }
@@ -45,7 +45,7 @@ export class AuthService {
     try {
       this.httpClient.appendAuthorizationToken(userStoreApi);
       const { data } = await userStoreApi.get("/auth/logout");
-      this.localStorage.removeFormStorage();
+      this.storage.removeFormStorage();
       return data.message as string;
     } catch (error) {
       throw new Error(this.httpClient.handleError(error));

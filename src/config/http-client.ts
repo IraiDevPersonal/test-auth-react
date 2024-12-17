@@ -1,8 +1,8 @@
 import axios, { AxiosInstance, CreateAxiosDefaults } from "axios";
-import { LocalStorageAdapter } from "./local-storage.adapter";
+import { BrowserStorage } from "./browser-storage";
 
 export class HttpClient {
-  constructor(private readonly localStorage: LocalStorageAdapter) {}
+  constructor(private readonly localStorage: BrowserStorage) {}
 
   public static create(config?: CreateAxiosDefaults) {
     return axios.create(config);

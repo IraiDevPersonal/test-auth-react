@@ -1,5 +1,5 @@
+import { BrowserStorage } from "@/config/browser-storage";
 import { HttpClient } from "@/config/http-client";
-import { LocalStorageAdapter } from "@/config/local-storage.adapter";
 import { Notification } from "@/config/notification";
 import { useMountEffect } from "@/hooks";
 import { formDataToObject } from "@/utils/helpers.util";
@@ -7,7 +7,7 @@ import { useState } from "react";
 import { UserEntity } from "../entities/user.entity";
 import { AuthService, LoginUserPayload } from "../services/auth.service";
 
-const storage = new LocalStorageAdapter("token");
+const storage = new BrowserStorage("token");
 const httpClient = new HttpClient(storage);
 const authService = new AuthService(storage, httpClient);
 
