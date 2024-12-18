@@ -1,5 +1,6 @@
 import { IconMail } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
+import { Checkbox } from "@/components/ui/Checkbox";
 import { Input } from "@/components/ui/Input";
 import { useFormStatus } from "react-dom";
 
@@ -7,6 +8,7 @@ export const LoginForm = () => {
   const { pending } = useFormStatus();
   return (
     <>
+      <Checkbox.Field name="checkbox" label="Click me" />
       <Input.Field
         type="email"
         name="email"

@@ -5,7 +5,7 @@ export type InputPasswordProps = {
   label?: React.ReactNode;
   showIcon?: boolean;
 } & Omit<InputProps, "type"> &
-  Pick<HelperTextProps, "error">;
+  Pick<InputHelperTextProps, "error">;
 
 export type InputFieldProps = {
   startContent?: React.ReactNode;
@@ -13,9 +13,9 @@ export type InputFieldProps = {
   label?: React.ReactNode;
   error?: string;
 } & InputProps &
-  HelperTextProps;
+  InputHelperTextProps;
 
-export type HelperTextProps = {
+export type InputHelperTextProps = {
   error?: string;
   message?: string;
 };

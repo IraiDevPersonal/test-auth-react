@@ -4,7 +4,7 @@ import { Label } from "../Label";
 import {
   InputPasswordProps,
   InputFieldProps,
-  HelperTextProps,
+  InputHelperTextProps,
   InputProps,
 } from "./types";
 import { IconEye, IconEyeOff, IconLock } from "../../icons";
@@ -27,6 +27,26 @@ export function Input({ ref, type, className, ...props }: InputProps) {
   );
 }
 
+function InputHelperText({ error, message }: InputHelperTextProps) {
+  return (
+    <>
+      {(message || error) && (
+        <p
+          role={error ? "alert" : "textbox"}
+          aria-live="polite"
+          className={cn("text-xs", error && "text-destructive")}
+        >
+          {message || error}
+        </p>
+      )}
+    </>
+  );
+}
+
+function InputRootWrapper(props: { children: React.ReactNode }) {
+  return <div className="space-y-1.5" {...props} />;
+}
+
 function InputField({
   startContent,
   endContent,
@@ -37,7 +57,7 @@ function InputField({
 }: InputFieldProps) {
   const id = useId();
   return (
-    <RootWrapper>
+    <InputRootWrapper>
       {label && (
         <Label className="block" htmlFor={props.id ?? id}>
           {label}
@@ -50,8 +70,8 @@ function InputField({
         <ContentWrapper content={endContent} className="end-0 pe-2" />
       </InputWrapper>
 
-      <HelperText error={error} message={message} />
-    </RootWrapper>
+      <InputHelperText error={error} message={message} />
+    </InputRootWrapper>
   );
 }
 
@@ -67,7 +87,7 @@ function InputPassword({
   const toggleVisibility = () => setIsVisible((prevState) => !prevState);
 
   return (
-    <RootWrapper>
+    <InputRootWrapper>
       {label && (
         <Label className="block" htmlFor={props.id ?? id}>
           {label}
@@ -97,29 +117,9 @@ function InputPassword({
         </button>
       </InputWrapper>
 
-      <HelperText error={error} />
-    </RootWrapper>
+      <InputHelperText error={error} />
+    </InputRootWrapper>
   );
-}
-
-function HelperText({ error, message }: HelperTextProps) {
-  return (
-    <>
-      {(message || error) && (
-        <p
-          role={error ? "alert" : "textbox"}
-          aria-live="polite"
-          className={cn("text-xs", error && "text-destructive")}
-        >
-          {message || error}
-        </p>
-      )}
-    </>
-  );
-}
-
-function RootWrapper(props: { children: React.ReactNode }) {
-  return <div className="space-y-1.5" {...props} />;
 }
 
 function InputWrapper(props: { children: React.ReactNode }) {
@@ -148,6 +148,8 @@ function ContentWrapper({
     </>
   );
 }
+
+export { InputHelperText, InputRootWrapper };
 
 Input.Field = InputField;
 Input.Password = InputPassword;
