@@ -7,7 +7,7 @@ const LoginPage = () => {
   return (
     <main className="min-h-screen w-full grid place-content-center">
       <form
-        className="p-4 border border-black w-max rounded-xl space-y-2 flex flex-col"
+        className="p-4 border border-black w-max rounded-xl flex flex-col gap-y-4"
         action={loginAction}
       >
         <h1 className="text-2xl font-bold">Login Form</h1>

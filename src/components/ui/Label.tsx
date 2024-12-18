@@ -3,7 +3,7 @@ import { cn } from "@/config/tailwind-merge.adapter";
 
 type LabelProps = React.LabelHTMLAttributes<HTMLLabelElement>;
 interface Props extends LabelProps {
-  ref?: React.RefObject<HTMLLabelElement | null>;
+  ref?: React.Ref<HTMLLabelElement | null>;
 }
 
 export const Label: React.FC<Props> = ({ className, ref, ...props }) => {

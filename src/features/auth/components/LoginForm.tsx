@@ -1,34 +1,31 @@
+import { IconMail } from "@/components/icons";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
 import { useFormStatus } from "react-dom";
 
 export const LoginForm = () => {
   const { pending } = useFormStatus();
   return (
     <>
-      <label htmlFor="email">Correo</label>
-      <input
-        id="email"
+      <Input.Field
         type="email"
         name="email"
+        label="Correo"
         disabled={pending}
-        className="p-2 rounded-lg bg-neutral-100 disabled:bg-gray-200 disabled:text-gray-400"
+        className="ps-10"
+        startContent={<IconMail />}
       />
 
-      <label htmlFor="password">Contraseña</label>
-      <input
-        type="text"
-        id="password"
+      <Input.Password
+        showIcon
         name="password"
+        label="Contraseña"
         disabled={pending}
-        className="p-2 rounded-lg bg-neutral-100 disabled:bg-gray-200 disabled:text-gray-400"
       />
 
-      <button
-        type="submit"
-        disabled={pending}
-        className="p-4 rounded-lg bg-indigo-600 text-white disabled:bg-gray-400"
-      >
+      <Button type="submit" disabled={pending}>
         Login
-      </button>
+      </Button>
     </>
   );
 };

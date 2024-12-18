@@ -3,9 +3,6 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
-      padding: {
-        18: "4.5rem",
-      },
       fontFamily: {
         // sans: ["var(--font-sans)"],
       },
@@ -48,7 +45,6 @@ export default {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        shadow: "hsl(var(--shadow))",
       },
     },
   },
