@@ -1,13 +1,14 @@
 import { createContext, PropsWithChildren, use } from "react";
 import { UserEntity } from "../entities/user.entity";
 import { useAuth } from "../hooks/useAuth";
+import { AuthLoginPayload } from "../models/auth.model";
 
 interface ContextProps {
   isLoading: boolean;
   user: UserEntity | null;
   isAuthenticated: boolean;
   logoutUser(): Promise<void>;
-  loginUser(payload: FormData): Promise<void>;
+  loginUser(payload: AuthLoginPayload): Promise<void>;
 }
 
 const AuthContext = createContext<ContextProps | undefined>(undefined);

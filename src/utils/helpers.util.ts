@@ -1,7 +1,7 @@
 import { RoutePaths } from "@/config/routes";
 
 export function formDataToObject<T>(formData: FormData) {
-  const payload = Object.fromEntries(formData.entries()) as unknown as T;
+  const payload = Object.fromEntries(formData) as unknown as T;
 
   return payload;
 }

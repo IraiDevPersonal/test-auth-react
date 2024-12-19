@@ -1,30 +1,26 @@
 import { IconMail } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
-import { Checkbox } from "@/components/ui/Checkbox";
 import { Input } from "@/components/ui/Input";
+import { UseFormRegister } from "@/hooks";
 import { useFormStatus } from "react-dom";
+import { AuthLoginPayload } from "../models/auth.model";
 
-export const LoginForm = () => {
+type Props = {
+  register: UseFormRegister<AuthLoginPayload>;
+};
+
+export const LoginForm: React.FC<Props> = ({ register }) => {
   const { pending } = useFormStatus();
-  console.log({ pending });
   return (
     <>
-      <Checkbox.Field name="checkbox" label="Click me" />
       <Input.Field
-        type="email"
-        name="email"
         label="Correo"
-        disabled={pending}
         className="ps-10"
         startContent={<IconMail />}
+        {...register("email")}
       />
 
-      <Input.Password
-        showIcon
-        name="password"
-        label="Contraseña"
-        disabled={pending}
-      />
+      <Input.Password showIcon label="Contraseña" {...register("password")} />
 
       <Button type="submit" disabled={pending}>
         Login {pending && "Loading..."}

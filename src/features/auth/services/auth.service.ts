@@ -2,11 +2,7 @@ import { userStoreApi } from "@/config/apis/user-store.api";
 import { HttpClient } from "@/config/http-client";
 import { BrowserStorage } from "@/config/browser-storage";
 import { UserEntity } from "../entities/user.entity";
-
-export interface LoginUserPayload {
-  email: string;
-  password: string;
-}
+import { AuthLoginPayload } from "../models/auth.model";
 
 export class AuthService {
   constructor(
@@ -14,7 +10,7 @@ export class AuthService {
     private readonly httpClient: HttpClient
   ) {}
 
-  public async loginUser(payload: LoginUserPayload) {
+  public async loginUser(payload: AuthLoginPayload) {
     try {
       const { data } = await userStoreApi.post("/auth/login", payload);
       const result = this.authResponseAdapater(data);

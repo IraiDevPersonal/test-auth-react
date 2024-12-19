@@ -2,10 +2,10 @@ import { BrowserStorage } from "@/config/browser-storage";
 import { HttpClient } from "@/config/http-client";
 import { Notification } from "@/config/notification";
 import { useMountEffect } from "@/hooks";
-import { formDataToObject } from "@/utils/helpers.util";
 import { useState } from "react";
 import { UserEntity } from "../entities/user.entity";
-import { AuthService, LoginUserPayload } from "../services/auth.service";
+import { AuthService } from "../services/auth.service";
+import { AuthLoginPayload } from "../models/auth.model";
 
 const storage = new BrowserStorage("token");
 const httpClient = new HttpClient(storage);
@@ -24,29 +24,28 @@ export function useAuth() {
       .then((user) => {
         setUser(user);
         setIsAuthenticated(true);
-        welcomeMessage(user.name);
+        welcomeNotification(user.name);
       })
       .catch((error) => {
         setUser(null);
         setIsAuthenticated(false);
-        errorMessage(error);
+        errorNotification(error);
       })
       .finally(() => {
         setIsLoading(false);
       });
   }, []);
 
-  const loginUser = async (formaData: FormData) => {
+  const loginUser = async (payload: AuthLoginPayload) => {
     try {
-      const payload = formDataToObject<LoginUserPayload>(formaData);
       const user = await authService.loginUser(payload);
       setUser(user);
       setIsAuthenticated(true);
-      welcomeMessage(user.name);
+      welcomeNotification(user.name);
     } catch (error) {
       setUser(null);
       setIsAuthenticated(false);
-      errorMessage(error);
+      errorNotification(error);
     }
   };
 
@@ -57,7 +56,7 @@ export function useAuth() {
       setUser(null);
       setIsAuthenticated(false);
     } catch (error) {
-      errorMessage(error);
+      errorNotification(error);
     }
   };
 
@@ -71,9 +70,9 @@ export function useAuth() {
   };
 }
 
-const welcomeMessage = (userName: string) => {
+const welcomeNotification = (userName: string) => {
   Notification.success(`Bienvenido ${userName}`);
 };
-const errorMessage = (error: unknown) => {
+const errorNotification = (error: unknown) => {
   Notification.error(HttpClient.getErrorMessage(error));
 };
