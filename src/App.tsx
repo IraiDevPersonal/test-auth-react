@@ -1,5 +1,5 @@
+import AuthProvider from "@/features/auth/stores/AuthProvider";
 import { Notification } from "@/components/ui/Notification";
-import { AuthProvider } from "@/features/auth/context/Auth.provider";
 import { AppRoutes } from "@/routes";
 
 function App() {

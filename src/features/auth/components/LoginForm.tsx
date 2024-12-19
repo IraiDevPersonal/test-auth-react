@@ -6,6 +6,7 @@ import { useFormStatus } from "react-dom";
 
 export const LoginForm = () => {
   const { pending } = useFormStatus();
+  console.log({ pending });
   return (
     <>
       <Checkbox.Field name="checkbox" label="Click me" />
@@ -26,7 +27,7 @@ export const LoginForm = () => {
       />
 
       <Button type="submit" disabled={pending}>
-        Login
+        Login {pending && "Loading..."}
       </Button>
     </>
   );

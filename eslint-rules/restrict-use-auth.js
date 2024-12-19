@@ -2,12 +2,12 @@ export default {
   meta: {
     type: "problem",
     docs: {
-      description: "Restrict `useAuth` imports to Auth.provider.tsx",
+      description: "Restrict `useAuth` imports to AuthProvider.tsx",
       category: "Best Practices",
     },
     messages: {
       restrictedImport:
-        "`useAuth` can only be imported in `Auth.provider.tsx`.",
+        'El hook "useAuth" solo puede ser importado en: "AuthProvider.tsx".',
     },
     schema: [], // No options
   },
@@ -22,7 +22,7 @@ export default {
 
           // Check if the current file is NOT 'Auth.provider.tsx'
           console.log({ fileName });
-          if (!fileName.endsWith("Auth.provider.tsx")) {
+          if (!fileName.endsWith("AuthProvider.tsx")) {
             context.report({
               node,
               messageId: "restrictedImport",

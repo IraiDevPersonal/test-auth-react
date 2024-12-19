@@ -3,7 +3,7 @@ import { Logout } from "@/features/auth/components/Logout";
 
 const DashboardPage = () => {
   return (
-    <main className="h-screen w-full grid place-content-center gap-3">
+    <main className="grid w-full h-screen gap-3 place-content-center">
       <h1>Dashboard.page</h1>
       <div>
         <RouterLink

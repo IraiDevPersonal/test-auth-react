@@ -1,7 +1,7 @@
-import { ROUTER_PATH_REGEX } from "../src/utils/helpers.util";
+const ROUTER_PATH_REGEX = /^[a-zA-Z0-9-_/*?&=]+$/;
 
 /**
- * @fileoverview Ensures the `expand` prop in `LinkRouter` matches the allowed pattern.
+ * @fileoverview Ensures the `expand` prop in `RouterLink and RouterNavLink` matches the allowed pattern.
  */
 
 export default {
@@ -9,21 +9,24 @@ export default {
     type: "problem",
     docs: {
       description:
-        "Ensure the `expand` prop in LinkRouter matches the allowed pattern.",
+        "Ensure the `expand` prop in RouterLink and RouterNavLink matches the allowed pattern.",
       category: "Possible Errors",
       recommended: false,
     },
     schema: [], // No options required
     messages: {
-      invalidExpand:
-        'The "expand" prop "{{expandValue}}" does not match the required pattern /^[a-zA-Z0-9-_/*?&=]+$/.',
+      invalidExpand: `La prop "expand" con el valor: "{{expandValue}}"  no es pemitida por el patron regex: /^[a-zA-Z0-9-_/*?&=]+$/.`,
     },
   },
   create(context) {
     return {
       JSXOpeningElement(node) {
-        // Check if the element is `LinkRouter`
-        if (node.name.name !== "LinkRouter") return;
+        // Check if the element is 'RouterLink and RouterNavLink'
+        if (
+          node.name.name !== "RouterLink" &&
+          node.name.name !== "RouterNavLink"
+        )
+          return;
 
         // Find the `expand` attribute
         const expandAttr = node.attributes.find(

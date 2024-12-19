@@ -1,5 +1,5 @@
 import { useTransition } from "react";
-import { useAuthContext } from "../context/Auth.context";
+import { useAuthContext } from "../stores/AuthProvider";
 
 export function useLogout() {
   const { logoutUser } = useAuthContext();

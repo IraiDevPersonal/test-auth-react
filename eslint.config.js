@@ -32,7 +32,6 @@ export default tseslint.config(
         "warn",
         { allowConstantExport: true },
       ],
-      // Carga la regla personalizada directamente
       "custom-rules/restrict-use-auth": ["error"],
       "custom-rules/validate-expand-prop": ["error"],
     },
