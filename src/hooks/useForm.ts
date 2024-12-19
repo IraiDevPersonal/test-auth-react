@@ -1,3 +1,4 @@
+import { Notification } from "@/config/notification";
 import { formDataToObject } from "@/utils/helpers.util";
 import { useActionState, useCallback } from "react";
 import { ZodError, ZodObject, ZodRawShape } from "zod";
@@ -29,28 +30,31 @@ export function useForm<T extends object>({
     UseFormState<T>,
     FormData
   >(async (prev, formData): Promise<UseFormState<T>> => {
-    const { success, data, error } = schema.safeParse(
-      formDataToObject(formData)
-    );
-
-    if (!success) {
-      const entries = Object.entries((error as ZodError).flatten().fieldErrors);
-      const errors = Object.fromEntries(
-        entries.map(([key, value = []]) => [key, value.join(", ")])
+    try {
+      const { success, data, error } = schema.safeParse(
+        formDataToObject(formData)
       );
-
+      if (!success) {
+        const entries = Object.entries(
+          (error as ZodError).flatten().fieldErrors
+        );
+        const errors = Object.fromEntries(
+          entries.map(([key, value = []]) => [key, value.join(", ")])
+        );
+        return {
+          ...prev,
+          errors: errors as UseFormState<T>["errors"],
+        };
+      }
+      await fn(data as T);
       return {
-        ...prev,
-        errors: errors as UseFormState<T>["errors"],
+        errors: undefined,
+        values: data as T,
       };
+    } catch (error) {
+      Notification.error(`${error}`);
+      return initialState;
     }
-
-    await fn(data as T);
-
-    return {
-      errors: undefined,
-      values: data as T,
-    };
   }, initialState);
 
   const register: UseFormRegister<T> = useCallback(
