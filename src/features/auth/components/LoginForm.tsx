@@ -1,18 +1,15 @@
 import { IconMail } from "@/components/icons";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { UseFormRegister } from "@/hooks";
-import { useFormStatus } from "react-dom";
-import { AuthLoginPayload } from "../models/auth.model";
+import { useLogin } from "../hooks/useLogin";
 
-type Props = {
-  register: UseFormRegister<AuthLoginPayload>;
-};
+let count = 1;
 
-export const LoginForm: React.FC<Props> = ({ register }) => {
-  const { pending } = useFormStatus();
+export const LoginForm: React.FC = () => {
+  const { formAction, register, isFormPending } = useLogin();
+  console.log("render LoginForm: ", count++);
   return (
-    <>
+    <form className="flex flex-col gap-y-4" action={formAction}>
       <Input.Field
         label="Correo"
         className="ps-10"
@@ -22,9 +19,9 @@ export const LoginForm: React.FC<Props> = ({ register }) => {
 
       <Input.Password showIcon label="Contraseña" {...register("password")} />
 
-      <Button type="submit" disabled={pending}>
-        Login {pending && "Loading..."}
+      <Button type="submit" disabled={isFormPending}>
+        Login
       </Button>
-    </>
+    </form>
   );
 };

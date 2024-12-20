@@ -14,6 +14,7 @@ export function useLogin() {
         },
       },
       fn: loginUser,
+      shouldControlledErrors: false,
     });
 
   return { formAction, register, formState, isFormPending };

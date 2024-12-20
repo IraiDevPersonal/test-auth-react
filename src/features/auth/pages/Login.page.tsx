@@ -1,18 +1,16 @@
 import { LoginForm } from "../components/LoginForm";
-import { useLogin } from "../hooks/useLogin";
+
+let count = 1;
 
 const LoginPage = () => {
-  const { formAction, register } = useLogin();
+  console.log("render count: ", count++);
 
   return (
     <main className="grid w-full min-h-screen place-content-center">
-      <form
-        className="flex flex-col p-4 border border-black w-max rounded-xl gap-y-4"
-        action={formAction}
-      >
-        <h1 className="text-2xl font-bold">Login Form</h1>
-        <LoginForm register={register} />
-      </form>
+      <div className="p-4 border border-black w-max rounded-xl">
+        <h1 className="mb-4 text-2xl font-bold">Login Form</h1>
+        <LoginForm />
+      </div>
     </main>
   );
 };
