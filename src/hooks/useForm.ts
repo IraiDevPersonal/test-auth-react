@@ -1,6 +1,6 @@
 import { Notification } from "@/config/notification";
 import { formDataToObject } from "@/utils/helpers.util";
-import { useActionState, useCallback } from "react";
+import { useActionState, useCallback, useEffect, useState } from "react";
 import { ZodError, ZodObject, ZodRawShape } from "zod";
 
 export type UseFormState<T extends object> = {
@@ -9,16 +9,17 @@ export type UseFormState<T extends object> = {
 };
 
 export type UseFormRegister<T extends object> = (name: keyof T) => {
-  name: keyof T;
-  disabled: boolean;
   error: Partial<Record<keyof T, string>>[keyof T] | undefined;
+  onChange: React.ChangeEventHandler<any>;
   defaultValue: T[keyof T];
+  disabled: boolean;
+  name: keyof T;
 };
 
 type Props<T extends object> = {
-  initialState: UseFormState<T>;
-  schema: ZodObject<ZodRawShape>;
   fn: (props: T) => Promise<void>;
+  schema: ZodObject<ZodRawShape>;
+  initialState: UseFormState<T>;
 };
 
 export function useForm<T extends object>({
@@ -56,16 +57,33 @@ export function useForm<T extends object>({
       return initialState;
     }
   }, initialState);
+  const [errors, setErrors] = useState<UseFormState<T>["errors"]>(
+    formState.errors
+  );
 
   const register: UseFormRegister<T> = useCallback(
-    (name) => ({
-      name,
-      disabled: isFormPending,
-      error: formState.errors?.[name],
-      defaultValue: formState.values[name],
-    }),
-    [formState, isFormPending]
+    (name) => {
+      return {
+        name,
+        error: errors?.[name],
+        disabled: isFormPending,
+        defaultValue: formState.values[name],
+        onChange: (e) => {
+          e.preventDefault();
+          if (!errors?.[name]) return;
+          setErrors((prev) => ({
+            ...prev,
+            [name]: "",
+          }));
+        },
+      };
+    },
+    [formState, errors, isFormPending]
   );
+
+  useEffect(() => {
+    setErrors(formState.errors);
+  }, [formState.errors]);
 
   return {
     register,
