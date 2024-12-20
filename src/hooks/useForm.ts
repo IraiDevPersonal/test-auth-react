@@ -8,10 +8,15 @@ export type UseFormState<T extends object> = {
   values: T;
 };
 
-export type UseFormRegister<T extends object> = (name: keyof T) => {
+export type UseFormRegister<T extends object> = (
+  name: keyof T,
+  options?: { setValue: (value: string) => void }
+) => {
   error: Partial<Record<keyof T, string>>[keyof T] | undefined;
-  onChange: React.ChangeEventHandler<any>;
-  defaultValue: T[keyof T];
+  onChange: React.ChangeEventHandler<
+    HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+  >;
+  defaultValue: T[keyof T] | undefined;
   disabled: boolean;
   name: keyof T;
 };
@@ -62,14 +67,15 @@ export function useForm<T extends object>({
   );
 
   const register: UseFormRegister<T> = useCallback(
-    (name) => {
+    (name, options) => {
       return {
         name,
         error: errors?.[name],
         disabled: isFormPending,
-        defaultValue: formState.values[name],
+        defaultValue: options?.setValue ? undefined : formState.values[name],
         onChange: (e) => {
           e.preventDefault();
+          options?.setValue(e.target.value);
           if (!errors?.[name]) return;
           setErrors((prev) => ({
             ...prev,
@@ -78,7 +84,7 @@ export function useForm<T extends object>({
         },
       };
     },
-    [formState, errors, isFormPending]
+    [formState.values, errors, isFormPending]
   );
 
   useEffect(() => {
